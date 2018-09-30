@@ -197,3 +197,7 @@ include_directories(
 
 ## Add folders to be run by python nosetests
 # catkin_add_nosetests(test)
+
+add_executable(concatenator src/concatenate_clouds.cpp)
+target_link_libraries(concatenator ${catkin_LIBRARIES})
+add_dependencies(concatenator racecar_3d_slam_generate_messages_cpp)
