@@ -11,23 +11,29 @@ class CloudCombine
 {
     public:
         void cloudCallback(const sensor_msgs::PointCloud2ConstPtr& input);
-        pcl::PCLPointCloud2 cloud_combined;
+        pcl::PointCloud<pcl::PointXYZ> cloud_combined;
 };
 
 void CloudCombine::cloudCallback(const sensor_msgs::PointCloud2ConstPtr& input)
 {
     // Containers for data
-    pcl::PCLPointCloud2* cloud = new pcl::PCLPointCloud2;
+    pcl::PointCloud<pcl::PointXYZ> cloud;
+    pcl::fromROSMsg(*input, cloud);
 
-    // Convert to PCL data type
-    pcl_conversions::toPCL(*input, *cloud);
 
     // Perform the actual combining
-    pcl::concatenatePointCloud(cloud_combined, *cloud, cloud_combined);
+    cloud_combined += cloud;
+    
+    // Cut part of cloud
+    int cloud_size = 100000;
+    if (cloud_combined.size() >= cloud_size) {
+        cloud_combined.erase(cloud_combined.begin(), cloud_combined.end()-cloud_size);
+    }
 
     // Convert to ROS data type
     sensor_msgs::PointCloud2 output;
-    pcl_conversions::fromPCL(cloud_combined, output);
+    pcl::toROSMsg(cloud_combined, output);
+    output.header.frame_id = "laser";
     pub.publish(output);
 }
 
