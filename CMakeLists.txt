@@ -4,6 +4,11 @@ project(racecar_3d_slam)
 ## Compile as C++11, supported in ROS Kinetic and newer
 # add_compile_options(-std=c++11)
 
+# Used for cgal
+set(CGAL_DONT_OVERRIDE_CMAKE_FLAGS TRUE CACHE BOOL "Don't override flags")
+#set(CMAKE_CXX_FLAGS "-lCGAL -lCGAL_Core -frounding-math ${CMAKE_CXX_FLAGS}")
+SET(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} ${CGAL_DEFINITIONS} -DYADE_CGAL -frounding-math ")
+
 ## Find catkin macros and libraries
 ## if COMPONENTS list like find_package(catkin REQUIRED COMPONENTS xyz)
 ## is used, also find other catkin packages
@@ -17,6 +22,9 @@ find_package(catkin REQUIRED COMPONENTS
 
 ## System dependencies are found with CMake's conventions
 # find_package(Boost REQUIRED COMPONENTS system)
+find_package(CGAL REQUIRED COMPONENTS Core)
+include( ${CGAL_USE_FILE})
+include( CGAL_CreateSingleSourceCGALProgram )
 
 
 ## Uncomment this if the package has a setup.py. This macro ensures
@@ -203,3 +211,12 @@ include_directories(
 add_executable(cloud_combine src/cloud_combine.cpp)
 target_link_libraries(cloud_combine ${catkin_LIBRARIES})
 
+add_executable(cgal src/cgal.cpp)
+target_link_libraries(cloud_combine ${catkin_LIBRARIES})
+
+add_executable(create_mesh src/create_mesh.cpp)
+target_link_libraries(create_mesh ${catkin_LIBRARIES})
+set_source_files_properties( create_mesh.cpp PROPERTIES COMPILE_FLAGS "-frounding-math" )
+
+add_executable(downsample_cloud src/downsample_cloud.cpp)
+target_link_libraries(downsample_cloud ${catkin_LIBRARIES})
