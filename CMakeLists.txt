@@ -211,12 +211,20 @@ include_directories(
 add_executable(cloud_combine src/cloud_combine.cpp)
 target_link_libraries(cloud_combine ${catkin_LIBRARIES})
 
+add_executable(cloud_transform src/cloud_transform.cpp)
+target_link_libraries(cloud_transform ${catkin_LIBRARIES})
+
 add_executable(cgal src/cgal.cpp)
 target_link_libraries(cloud_combine ${catkin_LIBRARIES})
 
 add_executable(create_mesh src/create_mesh.cpp)
 target_link_libraries(create_mesh ${catkin_LIBRARIES})
-set_source_files_properties( create_mesh.cpp PROPERTIES COMPILE_FLAGS "-frounding-math" )
 
 add_executable(downsample_cloud src/downsample_cloud.cpp)
 target_link_libraries(downsample_cloud ${catkin_LIBRARIES})
+
+add_executable(visualize_mesh src/visualize_mesh.cpp)
+target_link_libraries(visualize_mesh ${catkin_LIBRARIES})
+
+add_executable(message_filter src/message_filter.cpp)
+target_link_libraries(message_filter ${catkin_LIBRARIES})

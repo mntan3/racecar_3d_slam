@@ -1,0 +1,18 @@
+<launch>
+  <param name="/use_sim_time" value="true" />
+  <param name="/keep_points" value="30000" />
+
+  <include file="$(find racecar)/launch/includes/racecar-v2/static_transforms.launch.xml" />
+  <include file="$(find racecar_3d_slam)/launch/cartographer_2d.launch" />
+
+  <node name="rviz" pkg="rviz" type="rviz" required="true" 
+    args="-d $(find racecar_3d_slam)/config/display.rviz" />
+  <node name="playbag" pkg="rosbag" type="play" 
+    args="--clock /home/mtan/bagfiles/2018-09-28-19-46-05.bag" />
+
+  <node name="cloud_combine_server" pkg="racecar_3d_slam" type="cloud_combine"/>
+  <node name="mesh_creator" pkg="racecar_3d_slam" type="create_mesh"/>
+  <node name="mesh_visualize" pkg="racecar_3d_slam" type="visualize_mesh"/>
+  <node name="downsample_node" pkg="racecar_3d_slam" type="downsample_cloud"/>
+
+</launch>

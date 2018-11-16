@@ -7,14 +7,15 @@
 #include "pcl/filters/voxel_grid.h"
 
 ros::Publisher pub;
+float leaf_size;
 
-class CloudCombine
+class DownsampleCloud
 {
     public:
-        void cloudCallback(const sensor_msgs::PointCloud2ConstPtr& input);
+        void pointsCallback(const sensor_msgs::PointCloud2ConstPtr& input);
 };
 
-void CloudCombine::cloudCallback(const sensor_msgs::PointCloud2ConstPtr& input)
+void DownsampleCloud::pointsCallback(const sensor_msgs::PointCloud2ConstPtr& input)
 {
     // Containers for data
     pcl::PointCloud<pcl::PointXYZ> cloud;
@@ -25,25 +26,25 @@ void CloudCombine::cloudCallback(const sensor_msgs::PointCloud2ConstPtr& input)
 
     pcl::VoxelGrid<pcl::PointXYZ> sor;
     sor.setInputCloud (cloud_p);
-    sor.setLeafSize (1.0f, 1.0f, 1.0f);
+    sor.setLeafSize (0.1f, 0.1f, 0.1f);
     sor.filter (cloud_filtered);
     
     // Convert to ROS data type
     sensor_msgs::PointCloud2 output;
     pcl::toROSMsg(cloud_filtered, output);
     ROS_INFO("width: %d", output.width);
-    ROS_INFO("size: %zu", output.data.size());
     output.header.frame_id = "laser";
     pub.publish(output);
 }
 
 int main(int argc, char **argv)
 {
-    ros::init(argc, argv, "cloud_combine_server");
+    ros::init(argc, argv, "downsample_node");
     ros::NodeHandle nh;
+    nh.getParam("/leaf_size", leaf_size);
 
-    CloudCombine c;
-    ros::Subscriber sub = nh.subscribe<sensor_msgs::PointCloud2> ("velodyne_points", 1000, &CloudCombine::cloudCallback, &c);
+    DownsampleCloud c;
+    ros::Subscriber sub = nh.subscribe<sensor_msgs::PointCloud2> ("combined_points", 1000, &DownsampleCloud::pointsCallback, &c);
     pub = nh.advertise<sensor_msgs::PointCloud2> ("downsampled_points", 1);
 
     ros::spin();

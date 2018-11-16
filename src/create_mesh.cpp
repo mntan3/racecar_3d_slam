@@ -46,9 +46,9 @@ void MeshCreator::pointsCallback(const sensor_msgs::PointCloud2ConstPtr& input)
     // Construct mesh
     Reconstruction reconstruct (points.begin(), points.end());
     
-    Smoother smoother(10, 100);
+    Smoother smoother(12, 300);
     reconstruct.increase_scale(4, smoother);
-    Mesher mesher(smoother.squared_radius(), false, true);
+    Mesher mesher(smoother.squared_radius(), false, false);
 
     reconstruct.reconstruct_surface(mesher);
 
@@ -59,7 +59,7 @@ void MeshCreator::pointsCallback(const sensor_msgs::PointCloud2ConstPtr& input)
     for (Facet_iterator it = reconstruct.facets_begin(); it != reconstruct.facets_end(); ++it) {
         shape_msgs::MeshTriangle triangle_msg;
         triangle_msg.vertex_indices = *it;
-        //mesh_triangles.push_back(*it);
+        mesh_triangles.push_back(triangle_msg);
     }
 
     for (Point_iterator it=reconstruct.points_begin(); it != reconstruct.points_end(); ++it) {
@@ -84,7 +84,7 @@ int main(int argc, char **argv)
     ros::NodeHandle nh;
 
     MeshCreator m;
-    ros::Subscriber sub = nh.subscribe<sensor_msgs::PointCloud2> ("downsampled_points", 1000, &MeshCreator::pointsCallback, &m);
+    ros::Subscriber sub = nh.subscribe<sensor_msgs::PointCloud2> ("downsampled_points", 1, &MeshCreator::pointsCallback, &m);
     pub = nh.advertise<shape_msgs::Mesh> ("mesh", 1);
 
     ros::spin();

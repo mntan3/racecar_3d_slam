@@ -4,8 +4,13 @@
 #include "pcl/point_types.h"
 #include "pcl/point_cloud.h"
 #include "pcl_conversions/pcl_conversions.h"
+#include <geometry_msgs/TransformStamped.h>
+#include <tf2_ros/transform_listener.h>
+#include <tf2_ros/buffer.h>
+#include <tf2_sensor_msgs/tf2_sensor_msgs.h>
 
 ros::Publisher pub;
+int cloud_size;
 
 class CloudCombine
 {
@@ -25,7 +30,6 @@ void CloudCombine::cloudCallback(const sensor_msgs::PointCloud2ConstPtr& input)
     cloud_combined += cloud;
     
     // Cut part of cloud
-    int cloud_size = 300;
     if (cloud_combined.size() >= cloud_size) {
         cloud_combined.erase(cloud_combined.begin(), cloud_combined.end()-cloud_size);
     }
@@ -33,17 +37,20 @@ void CloudCombine::cloudCallback(const sensor_msgs::PointCloud2ConstPtr& input)
     // Convert to ROS data type
     sensor_msgs::PointCloud2 output;
     pcl::toROSMsg(cloud_combined, output);
-    output.header.frame_id = "laser";
+    output.header.frame_id="laser";
+
     pub.publish(output);
+
 }
 
 int main(int argc, char **argv)
 {
     ros::init(argc, argv, "cloud_combine_server");
     ros::NodeHandle nh;
+    nh.getParam("/keep_points", cloud_size);
 
     CloudCombine c;
-    ros::Subscriber sub = nh.subscribe<sensor_msgs::PointCloud2> ("velodyne_points", 1000, &CloudCombine::cloudCallback, &c);
+    ros::Subscriber sub = nh.subscribe<sensor_msgs::PointCloud2> ("velodyne_points", 1, &CloudCombine::cloudCallback, &c);
     pub = nh.advertise<sensor_msgs::PointCloud2> ("combined_points", 1);
 
     ros::spin();
