@@ -16,7 +16,7 @@ class VisualizeMesh
 void VisualizeMesh::meshCallback(const shape_msgs::MeshConstPtr& inputMesh)
 {
     visualization_msgs::Marker marker;
-    marker.header.frame_id = "laser";
+    marker.header.frame_id = "cartographer_map";
     marker.header.stamp = ros::Time();
     marker.id = 0;
     marker.type = visualization_msgs::Marker::TRIANGLE_LIST;

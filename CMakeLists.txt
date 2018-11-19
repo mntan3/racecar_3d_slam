@@ -19,6 +19,7 @@ find_package(catkin REQUIRED COMPONENTS
   pcl_conversions
   pcl_ros
 )
+find_package(Boost REQUIRED COMPONENTS system signals)
 
 ## System dependencies are found with CMake's conventions
 # find_package(Boost REQUIRED COMPONENTS system)
@@ -228,3 +229,9 @@ target_link_libraries(visualize_mesh ${catkin_LIBRARIES})
 
 add_executable(message_filter src/message_filter.cpp)
 target_link_libraries(message_filter ${catkin_LIBRARIES})
+
+add_executable(get_cloud src/get_cloud.cpp)
+target_link_libraries(get_cloud ${catkin_LIBRARIES})
+
+add_executable(cloud_snapshotter src/periodic_snapshotter.cpp)
+target_link_libraries(cloud_snapshotter ${catkin_LIBRARIES} ${Boost_LIBRARIES})

@@ -1,0 +1,28 @@
+<launch>
+  <param name="/use_sim_time" value="true" />
+  <param name="sampling_seconds" type="int" value="3" />
+
+  <remap from="combine_in_points" to="velodyne_points"/>
+  <remap from="downsample_in_points" to="assembled_cloud"/>
+
+
+  <include file="$(find racecar)/launch/includes/racecar-v2/static_transforms.launch.xml" />
+
+  <node name="rviz" pkg="rviz" type="rviz" required="true" 
+    args="-d $(find racecar_3d_slam)/config/display.rviz" />
+
+  <node name="playbag" pkg="rosbag" type="play" 
+    args="--clock /home/mtan/bagfiles/2018-11-18-20-36-21.bag" />
+  
+  <node type="point_cloud2_assembler" pkg="laser_assembler" name="point_cloud_assembler">
+    <remap from="cloud" to="velodyne_points"/>
+    <param name="max_clouds" type="int" value="400" />
+    <param name="fixed_frame" type="string" value="cartographer_map" />
+  </node>
+  <node name="periodic_snapshotter" pkg="racecar_3d_slam" type="cloud_snapshotter">
+  </node>
+
+  <node name="mesh_creator" pkg="racecar_3d_slam" type="create_mesh"/>
+  <node name="mesh_visualize" pkg="racecar_3d_slam" type="visualize_mesh"/>
+  <node name="downsample_node" pkg="racecar_3d_slam" type="downsample_cloud"/>
+</launch>

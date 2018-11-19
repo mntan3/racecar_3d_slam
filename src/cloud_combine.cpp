@@ -50,7 +50,7 @@ int main(int argc, char **argv)
     nh.getParam("/keep_points", cloud_size);
 
     CloudCombine c;
-    ros::Subscriber sub = nh.subscribe<sensor_msgs::PointCloud2> ("velodyne_points", 1, &CloudCombine::cloudCallback, &c);
+    ros::Subscriber sub = nh.subscribe<sensor_msgs::PointCloud2> ("combine_in_points", 1, &CloudCombine::cloudCallback, &c);
     pub = nh.advertise<sensor_msgs::PointCloud2> ("combined_points", 1);
 
     ros::spin();

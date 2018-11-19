@@ -1,0 +1,17 @@
+<launch>
+  <param name="/keep_points" value="50000" />
+
+  <include file="$(find racecar_3d_slam)/launch/cartographer_2d.launch" />
+
+  <node name="rviz" pkg="rviz" type="rviz" required="true" 
+    args="-d $(find racecar_3d_slam)/config/display.rviz" />
+
+  <remap from="downsample_in_points" to="velodyne_points" />
+  <remap from="combine_in_points" to="downsampled_points" />
+
+  <node name="cloud_combine_server" pkg="racecar_3d_slam" type="cloud_combine"/>
+<!--  <node name="mesh_creator" pkg="racecar_3d_slam" type="create_mesh"/>
+  <node name="mesh_visualize" pkg="racecar_3d_slam" type="visualize_mesh"/>
+-->
+  <node name="downsample_node" pkg="racecar_3d_slam" type="downsample_cloud"/>
+</launch>

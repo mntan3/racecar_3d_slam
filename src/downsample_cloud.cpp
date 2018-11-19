@@ -33,7 +33,7 @@ void DownsampleCloud::pointsCallback(const sensor_msgs::PointCloud2ConstPtr& inp
     sensor_msgs::PointCloud2 output;
     pcl::toROSMsg(cloud_filtered, output);
     ROS_INFO("width: %d", output.width);
-    output.header.frame_id = "laser";
+    output.header.frame_id = "cartographer_map";
     pub.publish(output);
 }
 
@@ -44,7 +44,7 @@ int main(int argc, char **argv)
     nh.getParam("/leaf_size", leaf_size);
 
     DownsampleCloud c;
-    ros::Subscriber sub = nh.subscribe<sensor_msgs::PointCloud2> ("combined_points", 1000, &DownsampleCloud::pointsCallback, &c);
+    ros::Subscriber sub = nh.subscribe<sensor_msgs::PointCloud2> ("downsample_in_points", 1000, &DownsampleCloud::pointsCallback, &c);
     pub = nh.advertise<sensor_msgs::PointCloud2> ("downsampled_points", 1);
 
     ros::spin();

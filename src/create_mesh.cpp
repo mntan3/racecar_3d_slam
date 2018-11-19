@@ -42,6 +42,9 @@ void MeshCreator::pointsCallback(const sensor_msgs::PointCloud2ConstPtr& input)
     {
         points.push_back(Point(it->x, it->y, it->z));
     }
+    if (points.size() == 0) {
+        return;
+    }
 
     // Construct mesh
     Reconstruction reconstruct (points.begin(), points.end());

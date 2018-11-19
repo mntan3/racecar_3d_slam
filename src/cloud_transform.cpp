@@ -32,10 +32,13 @@ public:
       ROS_WARN("Failure %s\n", ex.what()); //Print exception which was caught
     }
     sensor_msgs::PointCloud2 afterTransform;
-    tf2::doTransform(*point_ptr, afterTransform, transform);
+    afterTransform = *point_ptr;
+    afterTransform.header.frame_id = "cartographer_map";
+    pub.publish(afterTransform);
+    /*tf2::doTransform(*point_ptr, afterTransform, transform);
 
     pub.publish(afterTransform);
-
+*/
   }
 
 private:
