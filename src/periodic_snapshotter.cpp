@@ -71,6 +71,7 @@ public:
     first_time_ = true;
   }
 
+
   void timerCallback(const ros::TimerEvent& e)
   {
 
@@ -84,8 +85,11 @@ public:
 
     // Populate our service request based on our timer callback times
     AssembleScans2 srv;
-    srv.request.begin = e.last_real;
+    srv.request.begin = e.current_real - ros::Duration(10, 0);
     srv.request.end   = e.current_real;
+
+    ROS_INFO("Begin time %d", e.current_real - ros::Duration(10, 0));
+    ROS_INFO("End time %d", e.current_real.sec);
 
     // Make the service call
     if (client_.call(srv))
