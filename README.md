@@ -1,9 +1,12 @@
 # Overview
 This repository contains code for 3D mesh visualization for maps from Google Cartographer
 
-## Uses:
+## Dependencies:
+
 CGAL
+
 PCL
+
 Google Cartographer
 
 ## Demo:
