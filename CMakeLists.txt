@@ -18,6 +18,7 @@ find_package(catkin REQUIRED COMPONENTS
   std_msgs
   pcl_conversions
   pcl_ros
+  message_generation
 )
 find_package(Boost REQUIRED COMPONENTS system signals)
 
