@@ -6,13 +6,12 @@
   <remap from="downsample_in_points" to="assembled_cloud" />
 
   <include file="$(find racecar)/launch/includes/racecar-v2/static_transforms.launch.xml" />
-  <include file="$(find racecar_3d_slam)/launch/cartographer_2d.launch" />
+  <include file="$(find racecar_3d_slam)/launch/cartographer_3d.launch" />
 
   <node name="rviz" pkg="rviz" type="rviz" required="true" 
     args="-d $(find racecar_3d_slam)/config/display.rviz" />
   <node name="playbag" pkg="rosbag" type="play" 
-    args="--clock /home/mtan/bagfiles/2018-09-28-19-46-05.bag" />
-
+    args="--clock /home/mtan/bagfiles/2018-09-28-19-46-05_no_tf.bag" />
   <node type="point_cloud2_assembler" pkg="laser_assembler" name="point_cloud_assembler">
     <remap from="cloud" to="velodyne_points"/>
     <param name="max_clouds" type="int" value="400" />
@@ -23,5 +22,4 @@
   <node name="mesh_creator" pkg="racecar_3d_slam" type="create_mesh"/>
   <node name="mesh_visualize" pkg="racecar_3d_slam" type="visualize_mesh"/>
   <node name="downsample_node" pkg="racecar_3d_slam" type="downsample_cloud"/>
-
 </launch>

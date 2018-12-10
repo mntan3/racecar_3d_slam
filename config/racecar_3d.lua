@@ -13,7 +13,7 @@ options = {
   publish_frame_projected_to_2d = false,
   use_odometry = true,
   use_nav_sat = false,
-  num_laser_scans = 1,
+  num_laser_scans = 0,
   num_multi_echo_laser_scans = 0,
   num_subdivisions_per_laser_scan = 1,
   num_point_clouds = 1,
@@ -33,13 +33,13 @@ TRAJECTORY_BUILDER_3D.num_accumulated_range_data = 160
 MAP_BUILDER.use_trajectory_builder_3d = true
 MAP_BUILDER.num_background_threads = 7
 
-POSE_GRAPH.optimization_problem.huber_scale = 5e2
-POSE_GRAPH.optimize_every_n_nodes = 320
-POSE_GRAPH.constraint_builder.sampling_ratio = 0.03
-POSE_GRAPH.optimization_problem.ceres_solver_options.max_num_iterations = 10
-POSE_GRAPH.constraint_builder.min_score = 0.62
-POSE_GRAPH.constraint_builder.global_localization_min_score = 0.66
-
+-- POSE_GRAPH.optimization_problem.huber_scale = 5e2
+POSE_GRAPH.optimize_every_n_nodes = 3
+-- POSE_GRAPH.constraint_builder.sampling_ratio = 0.03
+-- POSE_GRAPH.optimization_problem.ceres_solver_options.max_num_iterations = 10
+-- POSE_GRAPH.constraint_builder.min_score = 0.62
+-- POSE_GRAPH.constraint_builder.global_localization_min_score = 0.66
+POSE_GRAPH.optimization_problem.log_solver_summary = true
 -- might be able to optimize these parameters
 -- see: http://google-cartographer-ros.readthedocs.io/en/latest/tuning.html
 -- TRAJECTORY_BUILDER_2D.submaps.num_range_data = 100

@@ -31,6 +31,8 @@ options = {
 MAP_BUILDER.use_trajectory_builder_2d = true
 MAP_BUILDER.num_background_threads = 4.0
 TRAJECTORY_BUILDER_2D.use_imu_data = true
+POSE_GRAPH.optimization_problem.log_solver_summary = true
+-- POSE_GRAPH.optimize_every_n_nodes = 0
 
 -- might be able to optimize these parameters
 -- see: http://google-cartographer-ros.readthedocs.io/en/latest/tuning.html
