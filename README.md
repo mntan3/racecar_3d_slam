@@ -3,9 +3,10 @@ This repository contains code for 3D mesh visualization for maps from Google Car
 
 ## Dependencies:
 
-* CGAL
-* PCL
-* Google Cartographer
+* [CGAL](https://www.cgal.org/)
+* [PCL](http://pointclouds.org/)
+* [Google Cartographer](https://github.com/googlecartographer)
 
 ## Demo:
 `roslaunch racecar_3d_slam test_hallway_bag.launch`
+![](room.gif)
