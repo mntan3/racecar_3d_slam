@@ -9,4 +9,5 @@ This repository contains code for 3D mesh visualization for maps from Google Car
 
 ## Demo:
 `roslaunch racecar_3d_slam test_hallway_bag.launch`
+
 ![](room.gif)
